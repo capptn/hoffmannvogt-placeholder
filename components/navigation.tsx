@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
-
+import ContactModal from "@/components/ContactModal";
 const navLinks = [
   { label: "Vorteile", href: "#vorteile" },
   { label: "So funktioniert's", href: "#prozess" },
@@ -65,10 +65,31 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const isOpenRef = useRef(isOpen);
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+
   useEffect(() => setMounted(true), []);
 
+  // Track scroll and update theme-color dynamically
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+      // Only update theme-color when menu is closed
+      if (!isOpenRef.current) {
+        const themeColorMeta = document.querySelector(
+          'meta[name="theme-color"]',
+        );
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute(
+            "content",
+            isScrolled ? "#000000" : "#0070CC",
+          );
+        }
+      }
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -89,7 +110,10 @@ export function Navigation() {
       html.style.backgroundColor = "";
       document.body.style.overflow = "";
       document.body.style.backgroundColor = "";
-      if (themeColorMeta) themeColorMeta.setAttribute("content", "#000000");
+      // Restore based on current scroll position
+      const isAtTop = window.scrollY <= 20;
+      if (themeColorMeta)
+        themeColorMeta.setAttribute("content", isAtTop ? "#0070CC" : "#000000");
     }
 
     return () => {
@@ -97,7 +121,6 @@ export function Navigation() {
       html.style.backgroundColor = "";
       document.body.style.overflow = "";
       document.body.style.backgroundColor = "";
-      if (themeColorMeta) themeColorMeta.setAttribute("content", "#000000");
     };
   }, [isOpen]);
 
@@ -130,22 +153,17 @@ export function Navigation() {
           <div className="hidden lg:flex items-center gap-8"></div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <a
-              href="mailto:sv@hoffmann-vogt.de"
-              className="bg-brand-blue text-white px-6 py-2.5 rounded-lg text-sm font-sans font-semibold hover:bg-brand-blue-dark transition-colors"
-            >
-              Kostenlose Bewertung
-            </a>
+            <ContactModal buttonText="Kostenlose Bewertung" />
           </div>
 
           {/* Mobile toggle */}
-          <button
+          {/*<button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 text-white min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label={isOpen ? "Navigation schliessen" : "Navigation oeffnen"}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          </button>*/}
         </div>
       </nav>
 

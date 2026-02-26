@@ -1,5 +1,6 @@
 import { ArrowRight, TrendingUp, Clock, Award } from "lucide-react";
 import Image from "next/image";
+import ContactModal from "@/components/ContactModal";
 
 export function HeroSection() {
   return (
@@ -48,13 +49,7 @@ export function HeroSection() {
                   Seit ueber 10 Jahren helfe ich Menschen dabei, die Welt der
                   Immobilien zu verstehen.
                 </p>
-                <a
-                  href="#kontakt"
-                  className="inline-flex items-center justify-center gap-2 bg-brand-blue text-white px-6 py-3 rounded-lg text-sm font-sans font-semibold hover:bg-brand-blue-dark transition-colors min-h-[44px]"
-                >
-                  Jetzt kostenlos bewerten lassen
-                  <ArrowRight className="w-4 h-4" />
-                </a>
+                <ContactModal buttonText="Jetzt kostenlos bewerten lassen" />
               </div>
             </div>
           </div>
@@ -77,13 +72,7 @@ export function HeroSection() {
               Immobilien zu verstehen.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <a
-                href="mailto:sv@hoffmann-vogt.de"
-                className="inline-flex items-center justify-center gap-2 bg-brand-blue text-white px-8 py-4 rounded-lg text-base font-sans font-semibold hover:bg-brand-blue-dark transition-colors min-h-[52px]"
-              >
-                Jetzt kostenlos bewerten lassen
-                <ArrowRight className="w-5 h-5" />
-              </a>
+              <ContactModal buttonText="Jetzt kostenlos bewerten lassen" />
             </div>
           </div>
 
